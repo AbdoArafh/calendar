@@ -1,0 +1,15 @@
+@import "tailwindcss";
+@import "@fontsource-variable/rubik";
+
+@theme inline {
+  --color-primary: #006b54;
+  --color-secondary: #b6985a;
+  --color-foreground: #010101;
+  --color-background: #eef0ef;
+
+  --font-rubik: "Rubik Variable";
+}
+
+:root {
+  font-family: var(--font-rubik);
+}
