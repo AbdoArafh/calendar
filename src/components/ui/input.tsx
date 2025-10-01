@@ -1,10 +1,14 @@
 import type { JSX } from "preact";
 import { cn } from "@/lib/utils";
 
-type InputProps = JSX.HTMLAttributes<HTMLInputElement> & {
+type InputProps = Omit<
+  JSX.HTMLAttributes<HTMLInputElement>,
+  "onChange" | "value"
+> & {
   label?: string;
   error?: string;
   onChange?: (text: string) => void;
+  value?: string;
   inputClassName?: string;
   placeholder?: string;
 };

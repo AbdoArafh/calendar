@@ -4,8 +4,9 @@ import { Combobox } from "./components/ui/combobox";
 import { XIcon } from "./components/shared/icons";
 import { produce } from "./lib/utils";
 import { Input } from "./components/ui/input";
+import type { City } from "./lib/types";
 
-type DataType = Record<string, { city: string; lat: string; lng: string }[]>;
+type DataType = Record<string, City[]>;
 
 const getID = () => Math.random();
 
@@ -33,8 +34,8 @@ export function App() {
         data[country] = rows
           .filter((row) => row[3] === country)
           .map((row) => {
-            const [city, lat, lng] = row;
-            return { city, lat, lng };
+            const [name, lat, lng] = row;
+            return { name, lat, lng };
           });
       });
 
@@ -88,8 +89,8 @@ export function App() {
                   options={
                     data[selectedCountry]
                       ?.map((city) => ({
-                        label: city.city,
-                        value: city.city,
+                        label: city.name,
+                        value: city.name,
                       }))
                       .filter(
                         (city) =>
@@ -114,7 +115,20 @@ export function App() {
                   placeholder="Pick a city..."
                   disabled={!selectedCountry}
                 />
-                <Input class="w-32" placeholder="Alt name..." />
+                <Input
+                  class="w-32"
+                  placeholder="Alt name..."
+                  value={selectedCity.alt}
+                  onChange={(value) => {
+                    const newSelectedCities = produce(
+                      selectedCities,
+                      (draft) => {
+                        draft[i].alt = value;
+                      }
+                    );
+                    setSelectedCities(newSelectedCities);
+                  }}
+                />
                 {i > 0 && i !== selectedCities.length - 1 && (
                   <button
                     class="cursor-pointer rounded-sm hover:bg-white/5 p-1 shrink-0"
@@ -127,7 +141,17 @@ export function App() {
             ))}
           </div>
         </div>
-        <Page />
+        <Page
+          cities={selectedCities
+            .filter((city) => city.name)
+            .map((city) => ({
+              name: city.alt ?? city.name!,
+              lat: data[selectedCountry]?.find((c) => c.name === city.name)
+                ?.lat!,
+              lng: data[selectedCountry]?.find((c) => c.name === city.name)
+                ?.lng!,
+            }))}
+        />
       </div>
     </div>
   );

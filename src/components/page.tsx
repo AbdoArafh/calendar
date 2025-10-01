@@ -1,18 +1,27 @@
+import type { City } from "@/lib/types";
 import {
+  cn,
   getDate,
   getDayName,
   getHijriDate,
   getMonthName,
+  getPrayerTimes,
   toArabicIndic,
 } from "../lib/utils";
 
 export type PageProps = {
   date?: Date;
+  cities: City[];
 };
 
-export function Page({ date = new Date() }: PageProps) {
+export function Page({ date = new Date(), cities }: PageProps) {
   const meladi = getDate(date);
   const higri = getHijriDate(date);
+
+  const prayerTimes = cities.map((city) => ({
+    ...getPrayerTimes(date, +city.lat, +city.lng),
+    cityName: city.name,
+  }));
 
   const header = (
     <div class="flex items-center justify-center">
@@ -47,7 +56,7 @@ export function Page({ date = new Date() }: PageProps) {
       {dayName}
 
       <div class="flex flex-col gap-1 text-xl font-light">
-        <div class="grid grid-cols-6 bg-secondary text-white text-center py-3 rounded-lg shadow-lg">
+        <div class="grid grid-cols-[repeat(5,1fr)_1.5fr] bg-secondary text-white py-3 rounded-lg shadow-lg">
           {["المدينة", "الفجر", "الظهر", "العصر", "المغرب", "العشاء"]
             .reverse()
             .map((cell) => (
@@ -55,13 +64,21 @@ export function Page({ date = new Date() }: PageProps) {
             ))}
         </div>
 
-        {Array.from(Array(5)).map((_, i) => (
+        {prayerTimes.map((time, i) => (
           <div
-            class={`grid grid-cols-6 text-center py-3 rounded-lg ${
+            class={cn(
+              "grid grid-cols-[repeat(5,1fr)_1.5fr] py-3 rounded-lg",
               i % 2 === 0 ? "bg-white" : "bg-gray-200"
-            }`}
+            )}
           >
-            {["القاهرة", "04:30", "12:15", "15:45", "18:30", "19:45"]
+            {[
+              time.cityName,
+              time.fajr,
+              time.dhuhr,
+              time.asr,
+              time.maghrib,
+              time.isha,
+            ]
 
               .reverse()
               .map((cell) => (
