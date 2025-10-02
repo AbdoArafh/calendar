@@ -2,9 +2,10 @@ import { useEffect, useState } from "preact/hooks";
 import { Page } from "./components/page";
 import { Combobox } from "./components/ui/combobox";
 import { XIcon } from "./components/shared/icons";
-import { produce } from "./lib/utils";
+import { printNode, produce } from "./lib/utils";
 import { Input } from "./components/ui/input";
 import type { City } from "./lib/types";
+import { Button } from "./components/ui/button";
 
 type DataType = Record<string, City[]>;
 
@@ -139,6 +140,15 @@ export function App() {
                 )}
               </div>
             ))}
+
+            <Button
+              onClick={() => {
+                const el = document.getElementById("page");
+                printNode(el!);
+              }}
+            >
+              Print
+            </Button>
           </div>
         </div>
         <Page

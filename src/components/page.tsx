@@ -5,28 +5,30 @@ import {
   getDayName,
   getHijriDate,
   getMonthName,
-  getPrayerTimes,
   toArabicIndic,
 } from "../lib/utils";
+import PrayTimes from "@/lib/utils/praytimes";
 
 export type PageProps = {
   date?: Date;
   cities: City[];
 };
 
+const prayTimes = new PrayTimes("Egypt");
+
 export function Page({ date = new Date(), cities }: PageProps) {
   const meladi = getDate(date);
   const higri = getHijriDate(date);
 
   const prayerTimes = cities.map((city) => ({
-    ...getPrayerTimes(date, +city.lat, +city.lng),
+    ...prayTimes.getTimes(date, [+city.lat, +city.lng]),
     cityName: city.name,
   }));
 
   const header = (
     <div class="flex items-center justify-center">
       <div class="px-4 py-4 bg-secondary text-5xl text-white text-center rounded-l-2xl w-[190px]">
-        {toArabicIndic(meladi.year)}
+        {toArabicIndic(meladi.year) + " م"}
       </div>
       <div class="flex flex-col items-center justify-center gap-2 size-32 border border-secondary rounded-2xl shadow-lg">
         {/* <span className="text-3xl">{data.day_name}</span> */}
@@ -35,8 +37,8 @@ export function Page({ date = new Date(), cities }: PageProps) {
           {getMonthName(meladi.month)}
         </span>
       </div>
-      <div class="px-4 py-4 bg-secondary text-5xl text-white text-center rounded-r-2xl w-[190px]">
-        {toArabicIndic(higri.year)}
+      <div class="px-4 py-4 bg-secondary text-5xl text-white text-center rounded-r-2xl w-[210px]">
+        {toArabicIndic(higri.year) + " هـ"}
       </div>
     </div>
   );
@@ -50,7 +52,10 @@ export function Page({ date = new Date(), cities }: PageProps) {
   );
 
   return (
-    <div class="flex flex-col gap-8 max-w-lg mx-auto bg-background text-foreground p-4">
+    <div
+      class="flex flex-col gap-8 max-w-lg mx-auto bg-background text-foreground p-4"
+      id="page"
+    >
       {header}
 
       {dayName}
@@ -82,7 +87,9 @@ export function Page({ date = new Date(), cities }: PageProps) {
 
               .reverse()
               .map((cell) => (
-                <div class="text-center">{toArabicIndic(cell)}</div>
+                <div class="text-center">
+                  {toArabicIndic(cell).replace("am", "ص").replace("pm", "م")}
+                </div>
               ))}
           </div>
         ))}
@@ -90,13 +97,3 @@ export function Page({ date = new Date(), cities }: PageProps) {
     </div>
   );
 }
-
-const data = {
-  year_meladi: "2021 م",
-  year_hegri: "1442 هـ",
-  day_meladi: "14",
-  day_hegri: "4",
-  month_meladi: "يوليو",
-  month_hegri: "جمادى أول",
-  day_name: "الأربعاء",
-};
