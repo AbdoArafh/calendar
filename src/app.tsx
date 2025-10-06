@@ -2,7 +2,7 @@ import { useEffect, useState } from "preact/hooks";
 import { Page } from "./components/page";
 import { Combobox } from "./components/ui/combobox";
 import { XIcon } from "./components/shared/icons";
-import { printNode, produce } from "./lib/utils";
+import { exportNodeToPDF, produce } from "./lib/utils";
 import { Input } from "./components/ui/input";
 import type { City } from "./lib/types";
 import { Button } from "./components/ui/button";
@@ -144,7 +144,7 @@ export function App() {
             <Button
               onClick={() => {
                 const el = document.getElementById("page");
-                printNode(el!);
+                exportNodeToPDF(el!);
               }}
             >
               Print

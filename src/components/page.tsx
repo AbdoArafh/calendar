@@ -27,7 +27,7 @@ export function Page({ date = new Date(), cities }: PageProps) {
 
   const header = (
     <div class="flex items-center justify-center">
-      <div class="px-4 py-4 bg-secondary text-5xl text-white text-center rounded-l-2xl w-[190px]">
+      <div class="px-4 py-4 bg-secondary text-5xl text-white text-center rounded-l-2xl w-[190px] leading-[1] align-middle">
         {toArabicIndic(meladi.year) + " م"}
       </div>
       <div class="flex flex-col items-center justify-center gap-2 size-32 border border-secondary rounded-2xl shadow-lg">
@@ -73,7 +73,7 @@ export function Page({ date = new Date(), cities }: PageProps) {
           <div
             class={cn(
               "grid grid-cols-[repeat(5,1fr)_1.5fr] py-3 rounded-lg",
-              i % 2 === 0 ? "bg-white" : "bg-gray-200"
+              i % 2 === 0 ? "bg-white" : "bg-[#e5e7eb]"
             )}
           >
             {[
@@ -88,7 +88,9 @@ export function Page({ date = new Date(), cities }: PageProps) {
               .reverse()
               .map((cell) => (
                 <div class="text-center">
-                  {toArabicIndic(cell).replace("am", "ص").replace("pm", "م")}
+                  {!i
+                    ? toArabicIndic(cell).replace("am", "ص").replace("pm", "م")
+                    : toArabicIndic(cell)}
                 </div>
               ))}
           </div>

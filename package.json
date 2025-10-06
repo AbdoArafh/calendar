@@ -12,6 +12,8 @@
     "@fontsource-variable/rubik": "^5.2.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.3",
     "preact": "^10.27.0",
     "tailwind-merge": "^3.3.1"
   },
